@@ -1,47 +1,56 @@
-# W3 Project - Building mySQL Data-base 
+# SQL Database for Blockbuster
 
-![portada](https://i0.wp.com/itsoftware.com.co/content/wp-content/uploads/2018/03/que-es-y-para-que-sirve-mysql-1.jpg)
+![blockbuster](https://github.com/Ironhack-Data-Madrid-Julio-2023/w3-project_SQL/assets/49964118/10d05dab-0f3e-45dc-8d0b-6c4f39986625)
+
+*Commit 1*
+
+## 1. Preparations
+
+   On this project I have to create an SQL database for blockbuster. The idea is that they will reopen and they need a new database for their stores. I have the data of their old store and I have to clean it and design the relations between the tables.
+
+   Before I can start working I created a jupyter notebook file to cconnect to MySQL server and i created an empty database/schema to begin working from there.
+
+   The first step is to understand the data. I will use the pandas library to load the .csv files and observe what type of data I am working with. I will start designing the ERD while i understand the data and the inner structure of the business.
+
+## 2. Look at the Data
+
+The first step is to understand the data. For this I load all the csv into dataframes from pandas and print the .head() of each df. It's important when importing pandas to set the option show all columns with this code:
+
+      pd.set_option('display.max_columns', None)
+
+We start looking at the data to understand the relationships that need defining. Once I have this I will know which data to clean and which to preserve. The process will require a lot of updates and changes throughout the code. I will sequentialy describe my findings going back ad forth from cleaning, understanding and modelling the ERD.
+
+## 3. Development
+
+### 3.1 First Look
+
+Issues:
+
+1. There is no Customer table. It needs to be created with the relevant customer data.
+
+2. The Update column doesn't fulfill any purpose. If you don't plan on keeping a history of every movement for future analisis it doesn't make sense.
+
+3. Old information on rental needs to be deleted. We need the table to start from the day they reopen.
+
+4. They are only opening one store so in innventory id we wouldn´t need to declare the store. This may change, decition will be taken later.
+
+5. Some films might be missing from the inventory. If there are no copies of them we should delete the file. It could also be very interesting to have a way of knowinng if the film is rented or not. I will add a column in the inventory table that determines the availability. 
+
+6. Actors that don't appear on any film should also be cleaned.
+
+7. Language and Category tables don't need the update time.
+
+8. Intermediate table for Film, Actor relationship. old_HDD has the information needed for that intermediate table.
+
+### 3.2 EDR V1
+
+After looking at the data and writting down the relations between the data this is the structure.
+
+<img src="https://github.com/Ironhack-Data-Madrid-Julio-2023/3.3-lab_mysql_advanced/assets/49964118/6985c056-0e4c-4d4b-9439-4c5fbbf03a50" alt="EDR" width="300" height="300">
+
+*Commit 2 and 3*
+
+### 3.3 Cleaning the data.
 
 
-The goal of this project is to build your own database from several csv files. For this project, you will start with 6 `csv` files. You will need to download it, import it, use your data wrangling skills to clean it up, have a first look at the data to figure out out to structure it, prepare it to be loaded in a sql database and finally build it. Some graphs to better understand the data will surely be useful!!
 
-## TO DO's
-
-1. Explore the data and write down what you have found
-   - you can use: `df.describe()`, `df["column"]`, etc.
-1. Clean the data (you can get rid of columns that doesn't give information)
-1. Build your databse
-1. Write at least 10 queries including: join, groupby, orderby, where, subqueries….that you think will be useful to get interesting insights from the data.**(SELECT* FROM TABLE_NAME doesn't count...)** 
-+ Bonus: Get creative!!! Create totally new tables or enrich the csv files with new data (found on the internet or even made up) that makes your database more valuable.
-
-
-## Suggested Ways to Get Started
-
-- Examine the data and try to understand what the fields mean before building the database.
-- Break the project down into different steps - use the topics covered in the lessons to form a check list, add anything else you can think of that may be wrong with your data set, and then work through the check list.
-- Use the tools in your tool kit - your knowledge of Python, data structures, Pandas, and data wrangling.
-  Work through the lessons in class & ask questions when you need to! Think about adding relevant code to your project each night, instead of, you know... procrastinating.
-- Commit early, commit often, don’t be afraid of doing something incorrectly because you can always roll back to a previous version.
-- Consult documentation and resources provided to better understand the tools you are using and how to accomplish what you want.
-
-## How to deliver the project
-
-1. Create a new repo with the name `sql-data-base-building` on your github account.
-   - Create a `README.md` file on repo root with project documentation. Make sure to include as much useful information as possible. Someone that finds the README.md should be able to fully get a gist of the project without browsing your files.
-   - Include a `.gitignore`
-   - At least 1 jupyter notebook is required
-   - Include the necessary code files to create and feed the database.
-   - Including your functions in a `src.py` is mandatory.
-   
-2. Open an `Issue` on this repo and paste your own repo's link.
-
-## Links & Resources
-
-
-- <https://numpy.org/doc/1.18/>
-- <https://pandas.pydata.org/>
-- https://docs.python.org/3/library/functions.html
-- https://matplotlib.org/
-- https://seaborn.pydata.org/
-- https://pandas.pydata.org/docs/
-- https://towardsdatascience.com/beware-of-storytelling-with-data-1710fea554b0?gi=537e0c10d89e
