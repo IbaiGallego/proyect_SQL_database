@@ -48,9 +48,19 @@ After looking at the data and writting down the relations between the data this 
 
 <img src="https://github.com/Ironhack-Data-Madrid-Julio-2023/3.3-lab_mysql_advanced/assets/49964118/6985c056-0e4c-4d4b-9439-4c5fbbf03a50" alt="EDR" width="300" height="300">
 
-*Commit 2 and 3*
+*Commit 2,3 and 4*
 
 ### 3.3 Cleaning the data.
+
+1. Deleting 'last update' columns in all tables.
+
+2. Deleting films that don't have a copy in the inventory to optimize space. Wont change the film_id.
+
+3. Deleting unnecessary columns on films e.g. 'original_language_id'
+
+4. Changing actor names from 'old' to actor_id
+
+*commit 5*
 
 
 
