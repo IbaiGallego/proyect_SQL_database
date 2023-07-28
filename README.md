@@ -54,13 +54,11 @@ After looking at the data and writting down the relations between the data this 
 
 1. Deleting 'last update' columns in all tables.
 
-2. Deleting films that don't have a copy in the inventory to optimize space. Wont change the film_id.
+2. Deleting unnecessary columns on films e.g. 'original_language_id'
 
-3. Deleting unnecessary columns on films e.g. 'original_language_id'
+3. Changing actor names from 'old' to actor_id and cleaning unnecessary columns.
 
-4. Changing actor names from 'old' to actor_id
-
-*commit 5*
+*commit 5 and 6*
 
 
 
