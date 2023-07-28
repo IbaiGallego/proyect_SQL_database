@@ -60,5 +60,7 @@ After looking at the data and writting down the relations between the data this 
 
 *commit 5 and 6*
 
+4. Category to film table. I have to clean the films that don't appear in old and check if they are in the inventory and then add the category.
+
 
 
