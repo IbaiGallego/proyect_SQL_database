@@ -56,11 +56,26 @@ After looking at the data and writting down the relations between the data this 
 
 2. Deleting unnecessary columns on films e.g. 'original_language_id'
 
-3. Changing actor names from 'old' to actor_id and cleaning unnecessary columns.
+3. Changing actor names from 'old' to actor_id and cleaning unnecessary columns. Joining the columns on first and last into full_name column
 
 *commit 5 and 6*
 
-4. Category to film table. I have to clean the films that don't appear in old and check if they are in the inventory and then add the category.
+4. Category to film table. The information on the film category in in the old table. The category column belongs in the film table so i made i function to add the value chequing for every unique element in the tuple set of values.
 
+5. delete store id from inventory. There is only one store
 
+*commit 7 and 8*
 
+After cleaning the data I have to design the remaining tables (staff, customer) and create the query using reverse engineering EDR from MySQLWorkbennch to create the database.
+
+### 3.4 Designing the Structure
+
+Ill show the end result, I defined the columns of the missing tables to finish getting the tables. Here is the EDR:
+
+![EDR](https://github.com/Ironhack-Data-Madrid-Julio-2023/3.3-lab_mysql_advanced/assets/49964118/664e6e41-074b-4ebf-8b6d-6651d922d2b3)
+
+*Here we cann see all the tables and their contents as well as the relationships between them.*
+
+*Commit 9*
+
+### 3.5 Uploading the data
