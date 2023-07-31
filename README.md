@@ -79,3 +79,7 @@ Ill show the end result, I defined the columns of the missing tables to finish g
 *Commit 9*
 
 ### 3.5 Uploading the data
+
+To upload the data first we forward engineer the EDR. After that we upload all the newly creared .csv files from the pandas database. We import each table infividuality going from the outer tables that donnt have foreign keys to the inner more conected ones. The we use the data export in the server option in MySQL Workbench annd create the dump file blockbuster.sql.
+
+*Commit 10 y 11*
