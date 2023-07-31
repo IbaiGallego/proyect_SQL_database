@@ -1,3 +1,235 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # SQL Database for Blockbuster
+
+# *Commit 1*
+
+# In[1]:
+
+
+import numpy as np
+import pandas as pd
+
+pd.set_option('display.max_columns', None)
+
+import mysql.connector as conn
+
+
+# ## 1. Create new database called blockbuster and connect to it
+
+# In[2]:
+
+
+conexion = conn.connect(host='localhost',
+                        user='root',
+                        passwd='password'
+                       )
+
+cursor = conexion.cursor()
+
+
+cursor
+
+
+# In[3]:
+
+
+cursor.execute('drop database if exists blockbuster;')
+
+cursor.execute('create database blockbuster;')
+
+conexion = conn.connect(host='localhost',
+                        user='root',
+                        passwd='password',
+                        database='blockbuster'
+                       )
+
+
+cursor = conexion.cursor()
+
+c=cursor.execute
+
+c
+
+
+# ## 2. Look at the Data
+
+# In[4]:
+
+
+actor = pd.read_csv('../data/actor.csv')
+categ = pd.read_csv('../data/category.csv')
+film = pd.read_csv('../data/film.csv')
+invent = pd.read_csv('../data/inventory.csv')
+lang = pd.read_csv('../data/language.csv')
+old = pd.read_csv('../data/old_HDD.csv')
+rental = pd.read_csv('../data/rental.csv')
+
+
+# *Commit 2,3 y 4*
+
+# ## 3. Data Cleaning
+
+# ### Deleting update time from all the columns
+
+# In[5]:
+
+
+x='last_update'
+
+actor.drop(x, axis=1, inplace= True)
+lang.drop(x, axis=1, inplace= True)
+rental.drop(x, axis=1, inplace= True)
+invent.drop(x, axis=1, inplace= True)
+film.drop(x, axis=1, inplace= True)
+categ.drop(x, axis=1, inplace= True)
+
+
+# ### Invent/Films fix
+
+# In[6]:
+
+
+film.drop('original_language_id', axis=1, inplace= True)
+
+
+# ### Deleting duplicated actor
+
+# In[7]:
+
+
+actor.drop(actor[actor.duplicated(subset=['first_name', 'last_name'])].index, inplace=True)
+
+
+# ### Changing the actor names from 'old' to actor_id
+
+# In[8]:
+
+
+old['actor_id'] = pd.Series([np.nan] * len(old))
+old['full_name'] = old['first_name'] + ' ' + old['last_name']
+
+del old['first_name']
+del old['last_name']
+
+
+
+# In[9]:
+
+
+actor['full_name'] = actor['first_name'] + ' ' + actor['last_name']
+
+del actor['first_name']
+del actor['last_name']
+
+
+# *commit 5*
+
+# In[10]:
+
+
+actores_ides = dict(zip(actor.full_name.values,actor.actor_id.values))
+
+
+# In[11]:
+
+
+old['actor_id'] = [actores_ides[i] for i in old.full_name]
+
+
+# In[12]:
+
+
+film_ides = dict(zip(film.title.values,film.film_id.values))
+
+
+# In[13]:
+
+
+old['title_id'] = [film_ides[i] for i in old.title]
+
+
+# In[14]:
+
+
+bad_columns= ['release_year', 'full_name', 'title']
+
+old.drop(columns=bad_columns, inplace=True)
+
+
+# *Commit 6*
+
+# ### Category  to film table
+
+# In[15]:
+
+
+film.drop(film[film.duplicated(subset=['title'])].index, inplace=True)
+
+
+# In[16]:
+
+
+selected_columns = old[['category_id', 'title_id']]
+tuples = [tuple(row) for row in selected_columns.itertuples(index=False)]
+unique_tuples = set(tuples)
+
+
+# In[17]:
+
+
+def categ_sust(x):
+    for a, b in unique_tuples:
+        if x == b:
+            return int(a)
+    return None
+
+
+# In[18]:
+
+
+film['category_id'] = film['film_id'].apply(categ_sust)
+
+
+# In[19]:
+
+
+nan_rows = film[film.isnull().any(axis=1)]
+nan_rows.shape
+film.fillna(0, inplace=True)
+
+
+# In[20]:
+
+
+film['category_id'] = film['category_id'].astype(int)
+
+
+# In[21]:
+
+
+old.drop('category_id', axis=1, inplace= True)
+
+
+# ### Delete store id from inventory
+
+# In[22]:
+
+
+invent.drop(columns='store_id', inplace=True)
+
+
+# *commit 7 and 8*
+
+# ### Uploading the data to SQL
+
+# This is the query to create all the tables.
+
+# In[ ]:
+
+
+'''
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -263,3 +495,56 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+'''
+
+
+# After forward engineer tha database is created. Now it is time to fill the data.
+
+# *Commit 9*
+
+# ### Uploading the data
+
+# In[25]:
+
+
+old.to_csv('film_actors.csv', index=False)
+
+
+# In[26]:
+
+
+film.to_csv('film.csv', index=False)
+
+
+# In[27]:
+
+
+actor.to_csv('actor.csv', index=False)
+
+
+# In[28]:
+
+
+categ.to_csv('categ.csv', index=False)
+
+
+# In[29]:
+
+
+lang.to_csv('lang.csv', index=False)
+
+
+# In[30]:
+
+
+invent.to_csv('invent.csv', index=False)
+
+
+# *Commit 10*
+
+# In[ ]:
+
+
+
+
